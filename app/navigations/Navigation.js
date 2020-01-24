@@ -68,7 +68,7 @@ const NavigationStacks = createBottomTabNavigator(
     }
   },
   {
-    initialRouteName: "Restaurants", // Indica cual es el home
+    initialRouteName: "Account", // Indica cual es el home
     order: ["Restaurants", "TopLists", "Search", "Account"], // Orden de aparicion de opciones de menu
     tabBarOptions: {
       inactiveTintColor: "#646464", //color de item activo
