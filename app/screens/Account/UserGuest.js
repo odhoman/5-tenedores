@@ -1,8 +1,13 @@
 import React from "react";
 import { StyleSheet, ScrollView, View, Text, Image } from "react-native";
 import { Button } from "react-native-elements";
+import { withNavigation } from "react-navigation";
 
-export default function UserGuest() {
+// En este caso props vienen con todas las funciones de navegacion
+function UserGuest(props) {
+  console.log(props);
+
+  const { navigation } = props;
   return (
     <ScrollView style={style.viewBody} centerContent={true}>
       <Image
@@ -23,12 +28,14 @@ export default function UserGuest() {
           buttonStyle={style.btnStyle}
           containerStyle={style.btnContainer}
           title="Ver tu perfil"
-          onPress={() => console.log("Hello World")}
+          onPress={() => navigation.navigate("Login")}
         />
       </View>
     </ScrollView>
   );
 }
+
+export default withNavigation(UserGuest);
 
 const style = StyleSheet.create({
   viewBody: {
