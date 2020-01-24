@@ -5,7 +5,7 @@ const AccountScreenStacks = createStackNavigator({
   Restaurants: {
     screen: AccountScreen,
     navigationOptions: () => ({
-      title: "Account"
+      title: "Accounts"
     })
   }
 });

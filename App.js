@@ -1,6 +1,7 @@
 import React from "react";
 import Navigation from "./app/navigations/Navigation";
 import { StyleSheet, Text, View } from "react-native";
+import { firebaseApp } from "./app/utils/FireBase";
 
 export default function App() {
   return (
@@ -10,12 +11,3 @@ export default function App() {
     <Navigation />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
-  }
-});
