@@ -4,7 +4,8 @@ import { Input, Icon, Button } from "react-native-elements";
 import { validateEmail } from "../../utils/Validation";
 import * as firebase from "firebase";
 
-export default function RegisterForm() {
+export default function RegisterForm(props) {
+  const { toastRef } = props;
   const [hidePassword, setHidePassword] = useState(true);
   const [hideRepeatPassword, setHideRepeatPassword] = useState(true);
   const [email, setEmail] = useState("");
@@ -12,29 +13,24 @@ export default function RegisterForm() {
   const [repPass, setRepPass] = useState("");
 
   const register = async () => {
-    // console.log("Usuario Registrado");
-    // console.log("email:" + email);
-    // console.log("pass:" + pass);
-    // console.log("repPass:" + repPass);
-    // const resultValidationEmail = validateEmail(email);
-    // console.log("Resultado validacion:" + resultValidationEmail);
-
     if (!email || !pass || !repPass) {
-      console.log("Todos los campos son obligatorios");
+      toastRef.current.show("Todos los campos son obligatorios");
     } else {
       if (!validateEmail(email)) {
-        console.log("Debe ingresar un email correcto");
+        toastRef.current.show("Debe ingresar un email correcto");
+        //TODO: crear validacion de password: minimos maximos y caracteres permitidos
       } else if (pass !== repPass) {
-        console.log("Las contrasenas no son iguales");
+        toastRef.current.show("Las contrasenas no son iguales");
       } else {
         await firebase
           .auth()
           .createUserWithEmailAndPassword(email, pass)
           .then(() => {
-            console.log("Usuario Creado correctamente");
+            toastRef.current.show("Usuario Creado correctamente");
           })
           .catch(e => {
-            console.log("Error al crear la cuenta: " + e);
+            //TODO: ver tema de cachear los errores http, errores de validacion (lenguaje)
+            toastRef.current.show("Error al crear la cuenta: " + e);
           });
       }
     }
