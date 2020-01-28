@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, View, Image, Text } from "react-native";
 import { Input, Icon, Button } from "react-native-elements";
 import { validateEmail } from "../../utils/Validation";
+import * as firebase from "firebase";
 
 export default function RegisterForm() {
   const [hidePassword, setHidePassword] = useState(true);
@@ -10,7 +11,7 @@ export default function RegisterForm() {
   const [pass, setPass] = useState("");
   const [repPass, setRepPass] = useState("");
 
-  const register = () => {
+  const register = async () => {
     // console.log("Usuario Registrado");
     // console.log("email:" + email);
     // console.log("pass:" + pass);
@@ -21,9 +22,21 @@ export default function RegisterForm() {
     if (!email || !pass || !repPass) {
       console.log("Todos los campos son obligatorios");
     } else {
-      if (!validateEmail(email)) console.log("Debe ingresar un email correcto");
-      else if (pass !== repPass) console.log("Las contrasenas no son iguales");
-      else console.log("Correcto");
+      if (!validateEmail(email)) {
+        console.log("Debe ingresar un email correcto");
+      } else if (pass !== repPass) {
+        console.log("Las contrasenas no son iguales");
+      } else {
+        await firebase
+          .auth()
+          .createUserWithEmailAndPassword(email, pass)
+          .then(() => {
+            console.log("Usuario Creado correctamente");
+          })
+          .catch(e => {
+            console.log("Error al crear la cuenta: " + e);
+          });
+      }
     }
   };
 
