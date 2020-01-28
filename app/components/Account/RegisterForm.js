@@ -5,16 +5,22 @@ import { Input, Icon, Button } from "react-native-elements";
 export default function RegisterForm() {
   const [hidePassword, setHidePassword] = useState(true);
   const [hideRepeatPassword, setHideRepeatPassword] = useState(true);
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+  const [repPass, setRepPass] = useState("");
 
   const register = () => {
     console.log("Usuario Registrado");
+    console.log("email:" + email);
+    console.log("pass:" + pass);
+    console.log("repPass:" + repPass);
   };
   return (
     <View style={styles.formContainer} behavior="padding" enabled>
       <Input
         placeholder="Correo Electronico"
         containerStyle={styles.inputForm}
-        onChange={() => console.log("gmail actualizado")}
+        onChange={e => setEmail(e.nativeEvent.text)}
         rightIcon={
           <Icon
             type="material-community"
@@ -28,7 +34,7 @@ export default function RegisterForm() {
         containerStyle={styles.inputForm}
         password={true}
         secureTextEntry={hidePassword}
-        onChange={() => console.log("pass actualizada")}
+        onChange={e => setPass(e.nativeEvent.text)}
         rightIcon={
           <Icon
             type="material-community"
@@ -43,7 +49,7 @@ export default function RegisterForm() {
         containerStyle={styles.inputForm}
         password={true}
         secureTextEntry={hideRepeatPassword}
-        onChange={() => console.log("repetir pass actualizada")}
+        onChange={e => setRepPass(e.nativeEvent.text)}
         rightIcon={
           <Icon
             type="material-community"
