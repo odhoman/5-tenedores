@@ -2,17 +2,21 @@ import React, { useState } from "react";
 import { StyleSheet, View, Image, Text } from "react-native";
 import { Input, Icon, Button } from "react-native-elements";
 import { validateEmail } from "../../utils/Validation";
+import { withNavigation } from "react-navigation";
 import * as firebase from "firebase";
+import Loading from "../Loading";
 
-export default function RegisterForm(props) {
-  const { toastRef } = props;
+function RegisterForm(props) {
+  const { toastRef, navigation } = props;
   const [hidePassword, setHidePassword] = useState(true);
   const [hideRepeatPassword, setHideRepeatPassword] = useState(true);
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [repPass, setRepPass] = useState("");
+  const [isVisibleLoading, setVisibleLoading] = useState(false);
 
   const register = async () => {
+    setVisibleLoading(true);
     if (!email || !pass || !repPass) {
       toastRef.current.show("Todos los campos son obligatorios");
     } else {
@@ -26,7 +30,7 @@ export default function RegisterForm(props) {
           .auth()
           .createUserWithEmailAndPassword(email, pass)
           .then(() => {
-            toastRef.current.show("Usuario Creado correctamente");
+            navigation.navigate("Restaurants");
           })
           .catch(e => {
             //TODO: ver tema de cachear los errores http, errores de validacion (lenguaje)
@@ -34,6 +38,7 @@ export default function RegisterForm(props) {
           });
       }
     }
+    setVisibleLoading(false);
   };
 
   return (
@@ -86,9 +91,12 @@ export default function RegisterForm(props) {
         buttonStyle={styles.btnRegister}
         onPress={register}
       />
+      <Loading text="Creando Cuenta..." isVisible={isVisibleLoading} />
     </View>
   );
 }
+
+export default withNavigation(RegisterForm);
 
 const styles = StyleSheet.create({
   formContainer: {
