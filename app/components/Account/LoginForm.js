@@ -31,6 +31,7 @@ function LoginForm(props) {
           .catch(e => {
             //TODO: ver tema de cachear los errores http, errores de validacion (lenguaje)
             toastRef.current.show("Error en la autenticacion: " + e);
+            console.log("Error en la autenticacion: " + e);
           });
       }
     }
