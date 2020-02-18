@@ -27,7 +27,7 @@ export default function LoginFacebook(props) {
         .then(() => {
           toastRef.current.show("Login correcto...");
           console.log("Login Correcto...");
-          navigation.navigate("MyAccount");
+          navigation.navigate("Restaurants");
         })
         .catch(e => {
           toastRef.current.show("Errorrrrrr: " + e);

@@ -7,8 +7,14 @@ import * as ImgagePicker from "expo-image-picker";
 
 export default function InfoUser(props) {
   const {
-    userInfo: { uid, displayName, email, photoURL }
+    userInfo: { uid, displayName, email, photoURL },
+    setReloadData,
+    toastRef,
+    setIsLoading,
+    setTextLoading
   } = props;
+
+  // TODO: ver como restringir el cambio del avatar para cuando venimos de una red social
   const changeAvatar = async () => {
     const resultPermission = await Permissions.askAsync(
       Permissions.CAMERA_ROLL
@@ -16,7 +22,7 @@ export default function InfoUser(props) {
     const resultPermissionCamera =
       resultPermission.permissions.cameraRoll.status;
     if (resultPermissionCamera === "denied") {
-      console.log("dar permisos a la camara");
+      toastRef.current.show("dar permisos a la camara");
     } else if (resultPermissionCamera === "granted") {
       //TODO restringir tamanio para que no sea gigante
       const result = await ImgagePicker.launchImageLibraryAsync({
@@ -25,7 +31,7 @@ export default function InfoUser(props) {
       });
 
       if (result.cancelled) {
-        cosole.log("has cerrado la galeria de imagenes");
+        toastRef.current.show("Has cerrado la galeria de imagenes");
       } else {
         uploadImage(result.uri, uid).then(() => {
           updatePhotoUrl(uid);
@@ -44,13 +50,18 @@ export default function InfoUser(props) {
           photoURL: result
         };
         await firebase.auth().currentUser.updateProfile(update);
+        // Se ejecuta setReloadData y se renderiza el avatar
+        setReloadData(true);
+        setIsLoading(false);
       })
       .catch(e => {
-        console.log("Error recuperando url de imagen: " + e);
+        toastRef.current.show("rror recuperando la imagen: " + e);
       });
   };
 
   const uploadImage = async (uri, uid) => {
+    setTextLoading("Actualizando Avatar");
+    setIsLoading(true);
     const response1 = await fetch(uri);
     const blob = await response1.blob();
     //console.log(blob);
